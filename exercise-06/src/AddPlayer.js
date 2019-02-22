@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ShowMessage from "./ShowMessage";
 
 class AddPlayer extends Component {
 
@@ -18,35 +19,60 @@ class AddPlayer extends Component {
         playerExists: false
     };
 
-    isEmpty = () => {
-        const { firstName, lastName, username } = this.state.player;
-        let isEmpty = false;
+    verifyUniqueUsername = username => {
+        const players = this.props.players;
+        let playerExists = false;
 
-        if (firstName === '' || lastName === '' || username === '') {
-            isEmpty = true;
+        let index = 0;
+
+        while(index < players.length && !playerExists) {
+            if(players[index].username === username) {
+                playerExists = true;
+            }
+
+            index++;
         }
 
-        return isEmpty;
+        return playerExists;
     };
 
-    isValid = () => !this.state.playerExists && !this.isEmpty();
+    isEmpty = () => {
+        const { firstName, lastName, username } = this.state.player;
+
+        return firstName === '' || lastName === '' || username === '';
+    };
 
     changeHandler = event => {
-        console.log(event);
         const { name, value } = event.target;
 
-        this.setState((currentPlayer) => {
-            currentPlayer['player'][name] = value;
+        this.setState(currentState => ({
+            ...currentState,
+            player: {
+                ...currentState.player,
+                [ name ]: value
+            }
+        }));
+    };
 
-            return currentPlayer;
-        });
+    addPlayer = event => {
+        event.preventDefault();
+        const playerExists = this.verifyUniqueUsername(this.state.player.username);
+
+        if (!playerExists) {
+            this.props.onAddPlayer(this.state.player);
+        }
+
+        this.setState( { playerExists });
     };
 
     render() {
         return (
             <div>
                 <h2>Add New Player</h2>
-                <form>
+                <ShowMessage
+                    message='You cannot add a user that already exists.'
+                    show={this.state.playerExists}/>
+                <form onSubmit={this.addPlayer}>
                     <input type='text' name='firstName' placeholder='First Name'
                         value={this.state.player.firstName} onChange={this.changeHandler}/>
                     <input type='text' name='lastName' placeholder='Last Name'
@@ -57,7 +83,7 @@ class AddPlayer extends Component {
                     <input type='number' name='gamesPlayed' placeholder='Games Played'
                         value={this.state.player.gamesPlayed} onChange={this.changeHandler}/>
                     <br/>
-                    <button type='submit' disabled={!this.isValid()}>Add Player</button>
+                    <button type='submit' disabled={this.isEmpty()}>Add</button>
                 </form>
             </div>
         );

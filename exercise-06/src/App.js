@@ -16,8 +16,13 @@ class App extends Component {
         players: []
     };
 
-    onAddPlayer = (player) => {
-
+    createPlayer = player => {
+        this.setState(currentState => ({
+            players: [
+                ...currentState.players,
+                player
+            ]
+        }));
     };
 
     render() {
@@ -29,7 +34,8 @@ class App extends Component {
                 </header>
 
                 <AddPlayer
-                    players={this.state.players}/>
+                    players={this.state.players}
+                    onAddPlayer={this.createPlayer}/>
             </div>
         );
     }
