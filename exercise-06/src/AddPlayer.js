@@ -16,24 +16,48 @@ class AddPlayer extends Component {
             gamesPlayed: 0
         },
         playerExists: false
-    }
+    };
+
+    isEmpty = () => {
+        const { firstName, lastName, username } = this.state.player;
+        let isEmpty = false;
+
+        if (firstName === '' || lastName === '' || username === '') {
+            isEmpty = true;
+        }
+
+        return isEmpty;
+    };
+
+    isValid = () => !this.state.playerExists && !this.isEmpty();
+
+    changeHandler = event => {
+        console.log(event);
+        const { name, value } = event.target;
+
+        this.setState((currentPlayer) => {
+            currentPlayer['player'][name] = value;
+
+            return currentPlayer;
+        });
+    };
 
     render() {
         return (
             <div>
                 <h2>Add New Player</h2>
                 <form>
-                    <input type='text' placeholder='First Name'
-                        value={this.state.player.firstName}/>
-                    <input type='text' placeholder='Last Name'
-                        value={this.state.player.lastName}/>
+                    <input type='text' name='firstName' placeholder='First Name'
+                        value={this.state.player.firstName} onChange={this.changeHandler}/>
+                    <input type='text' name='lastName' placeholder='Last Name'
+                        value={this.state.player.lastName} onChange={this.changeHandler}/>
                     <br/>
-                    <input type='text' placeholder='User Name'
-                        value={this.state.player.username}/>
-                    <input type='number' placeholder='Games Played'
-                        value={this.state.player.gamesPlayed}/>
+                    <input type='text' name='username' placeholder='User Name'
+                        value={this.state.player.username} onChange={this.changeHandler} />
+                    <input type='number' name='gamesPlayed' placeholder='Games Played'
+                        value={this.state.player.gamesPlayed} onChange={this.changeHandler}/>
                     <br/>
-                    <button type='submit' disabled={this.state.playerExists}>Add Player</button>
+                    <button type='submit' disabled={!this.isValid()}>Add Player</button>
                 </form>
             </div>
         );
