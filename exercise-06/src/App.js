@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import logo                 from './logo.svg';
+import React, {Component} from 'react';
+import logo from './logo.svg';
 import './App.css';
-import AddPlayer            from './AddPlayer';
+import AddPlayer from './AddPlayer';
+import PlayerList from "./PlayerList";
 
 /*
 This exercise will help you put together and practice all of the concepts you've
@@ -36,6 +37,8 @@ class App extends Component {
                 <AddPlayer
                     players={this.state.players}
                     onAddPlayer={this.createPlayer}/>
+                <hr/>
+                <PlayerList players={this.state.players}/>
             </div>
         );
     }
