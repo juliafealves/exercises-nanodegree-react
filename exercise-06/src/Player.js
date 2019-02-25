@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Player = props => {
-    const { player } = props;
+    const {player, showGamesPlayed} = props;
 
     return (
-        <li key={player.username}>{`${player.firstName} - (${player.username}) - Games Played: ${player.gamesPlayed}`}</li>
+        <li>{`${player.firstName} - (${player.username}) - Games Played: ${showGamesPlayed ? player.gamesPlayed : '*'}`}</li>
     );
 };
 
 Player.propTypes = {
-    player: PropTypes.object.isRequired
+    player: PropTypes.object.isRequired,
+    showGamesPlayed: PropTypes.bool.isRequired
 };
 
 export default Player;
